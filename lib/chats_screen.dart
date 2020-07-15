@@ -9,7 +9,7 @@ class Chats extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: appBarColor,
         centerTitle: true,
-        leading: Icon(FlutterIcons.log_out_fea),
+        leading: Icon(Feather.log_out),
         title: Text('Dashboard', style: appBarTextStyle,),
       ),
       body: Padding(

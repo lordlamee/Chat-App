@@ -71,8 +71,14 @@ class ChatTile extends StatelessWidget {
 class TextBox extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(),
+    return Row(
+      children: <Widget>[
+        Container(
+          height: 36,
+          width: 36,
+          decoration: BoxDecoration(),
+        ),
+      ],
     );
   }
 }

@@ -4,9 +4,11 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 final Firestore fireStore = Firestore.instance;
 
 storeUserDetails() async {
-  await fireStore.collection("users").add({
-    "name": userName,
-    "email": userEmail,
-    "photoUrl": photoUrl,
-  });
+  await fireStore.collection("users").document(userId).setData(
+      {
+        "name": userName,
+        "email": userEmail,
+        "photoUrl": photoUrl,
+      }
+  );
 }

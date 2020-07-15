@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 var userName;
 var userEmail;
 var photoUrl;
+var userId;
 final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
 final GoogleSignIn googleSignIn = GoogleSignIn();
 Future<String> signInWithGoogle() async {
@@ -21,6 +22,7 @@ Future<String> signInWithGoogle() async {
   userName = currentUser.displayName;
   userEmail = currentUser.email;
   photoUrl = currentUser.photoUrl;
+  userId = currentUser.uid;
   return 'Sign In of $user success';
 }
 

@@ -31,53 +31,64 @@ class ChatTile extends StatelessWidget {
                   )),
         );
       },
-      child: Row(
-        children: <Widget>[
-          Container(
-            height: 64,
-            width: 64,
-            decoration: BoxDecoration(
-              color: Colors.grey,
-              shape: BoxShape.circle,
-              //image: DecorationImage(image: image),
-            ),
-          ),
-          SizedBox(
-            width: 20,
-          ),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
+      child: Padding(
+        padding: const EdgeInsets.only(bottom: 20),
+        child: Column(
+          children: <Widget>[
+            Row(
               children: <Widget>[
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    Text(
-                      name,
-                      style: GoogleFonts.rubik(
-                        color: textColor,
-                        fontWeight: FontWeight.w500,
-                      ),
+                Container(
+                  height: 64,
+                  width: 64,
+                  decoration: BoxDecoration(
+                    color: Colors.grey,
+                    shape: BoxShape.circle,
+                    image: DecorationImage(
+                      image: image,
                     ),
-                    Text(
-                      messageTime,
-                      style: GoogleFonts.rubik(
-                        color: textColor.withOpacity(0.4),
-                      ),
-                    )
-                  ],
-                ),
-                Text(
-                  messagePreview,
-                  style: GoogleFonts.rubik(
-                    color: textColor.withOpacity(0.4),
+                    //image: DecorationImage(image: image),
                   ),
-                )
+                ),
+                SizedBox(
+                  width: 20,
+                ),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: <Widget>[
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          Text(
+                            name,
+                            style: GoogleFonts.rubik(
+                              color: textColor,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                          Text(
+                            messageTime,
+                            style: GoogleFonts.rubik(
+                              color: textColor.withOpacity(0.4),
+                            ),
+                          )
+                        ],
+                      ),
+                      Text(
+                        messagePreview,
+                        style: GoogleFonts.rubik(
+                          color: textColor.withOpacity(0.4),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
               ],
             ),
-          ),
-        ],
+            Divider()
+          ],
+        ),
       ),
     );
   }

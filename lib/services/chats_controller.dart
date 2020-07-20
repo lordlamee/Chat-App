@@ -1,6 +1,7 @@
 import 'package:chat_app/models/models.dart';
 import 'package:chat_app/services/sign_in_service.dart';
 import 'package:chat_app/services/store_user_info.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 getChats() async {
   // final chats =  fireStore.collection("users").snapshots();
@@ -32,7 +33,7 @@ getChats() async {
 //      for( var message in messages.documents)
 //     print(message.data["content"]);
 //   }
-  final messageTest2 = fireStore
+  final Stream<QuerySnapshot> messageTest2 = fireStore
       .collection("chats")
       .where("users", arrayContains: "user1id")
       .snapshots();
@@ -52,7 +53,7 @@ getChats() async {
 }
 
 searchUser(String name) {
-  fireStore.collection("users").where("name", isEqualTo: name).getDocuments();
+  fireStore.collection("users").where("name", ).getDocuments();
 }
 
 sendMessage(Message message, String documentId) async {

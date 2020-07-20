@@ -5,6 +5,7 @@ class Message {
   String senderId;
   Timestamp timestamp;
   Message({this.content,this.senderId,this.timestamp});
+
    Message.fromJson(Map<String,dynamic> json){
      content = json["content"];
      senderId = json["senderId"];

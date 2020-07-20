@@ -1,4 +1,5 @@
 import 'package:chat_app/chats_screen.dart';
+import 'package:chat_app/screens/new_chat.dart';
 import 'package:chat_app/services/store_user_info.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -14,7 +15,7 @@ class SignIn extends StatelessWidget {
               await signInWithGoogle();
               storeUserDetails();
               Navigator.push(
-                  context, CupertinoPageRoute(builder: (context) => Chats()));
+                  context, CupertinoPageRoute(builder: (context) => NewChat()));
             },
             icon: ImageIcon(
               AssetImage('assets/google_logo.png'),

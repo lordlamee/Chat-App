@@ -27,41 +27,50 @@ class Chats extends StatelessWidget {
       ),
       body: Padding(
           padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
-          child: StreamBuilder<QuerySnapshot>(
-            stream: fireStore.collection("users").snapshots(),
-            builder: (context, snapshot) {
-              if (snapshot.hasData) {
-                var usersData = snapshot.data.documents;
-                List<Widget> chatTiles = [];
-                for (var data in usersData) {
-                  var username = data.data["name"];
-                  var photoUrl = data.data["photoUrl"];
-                  if (username != userName) {
-                    Widget chatTile = ChatTile(
-                      name: username.toString(),
-                      messageTime: '2:00pm',
-                      messagePreview: 'new message',
-                      image: NetworkImage(photoUrl.toString()),
-                    );
-                    chatTiles.add(chatTile);
-                  }
-                }
-                return ListView.separated(
-                  itemCount: chatTiles.length,
-                  itemBuilder: (context, index) {
-                    return chatTiles[index];
+          child: Column(
+            children: <Widget>[
+              TextFormField(
+
+              ),
+              Expanded(
+                child: StreamBuilder<QuerySnapshot>(
+                  stream: fireStore.collection("users").snapshots(),
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      var usersData = snapshot.data.documents;
+                      List<Widget> chatTiles = [];
+                      for (var data in usersData) {
+                        var username = data.data["name"];
+                        var photoUrl = data.data["photoUrl"];
+                        if (username != userName) {
+                          Widget chatTile = ChatTile(
+                            name: username.toString(),
+                            messageTime: '2:00pm',
+                            messagePreview: 'new message',
+                            image: NetworkImage(photoUrl.toString()),
+                          );
+                          chatTiles.add(chatTile);
+                        }
+                      }
+                      return ListView.separated(
+                        itemCount: chatTiles.length,
+                        itemBuilder: (context, index) {
+                          return chatTiles[index];
+                        },
+                        separatorBuilder: (context, index) => Divider(
+                          height: 20,
+                        ),
+                        shrinkWrap: true,
+                      );
+                    } else {
+                      return Container(
+                        child: Text('No Users Here'),
+                      );
+                    }
                   },
-                  separatorBuilder: (context, index) => Divider(
-                    height: 20,
-                  ),
-                  shrinkWrap: true,
-                );
-              } else {
-                return Container(
-                  child: Text('No Users Here'),
-                );
-              }
-            },
+                ),
+              ),
+            ],
           )),
     );
   }

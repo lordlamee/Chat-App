@@ -1,8 +1,6 @@
 import 'package:chat_app/screens/new_chat.dart';
 import 'package:chat_app/services/sign_in_service.dart';
-import 'package:chat_app/services/store_user_info.dart';
-import 'file:///C:/Users/OG/AndroidStudioProjects/chat_app/lib/utilities/widgets.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:chat_app/utilities/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 

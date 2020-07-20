@@ -1,5 +1,5 @@
-import 'file:///C:/Users/OG/AndroidStudioProjects/chat_app/lib/screens/chat_details.dart';
 import 'package:chat_app/models/models.dart';
+import 'package:chat_app/screens/chat_details.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';

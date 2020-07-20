@@ -3,7 +3,6 @@ import 'package:chat_app/services/store_user_info.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-
 import '../utilities/widgets.dart';
 
 class NewChat extends StatefulWidget {

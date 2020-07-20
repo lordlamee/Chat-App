@@ -1,4 +1,4 @@
-import 'package:chat_app/screens/chats_screen.dart';git
+import 'package:chat_app/screens/chats_screen.dart';
 import 'package:chat_app/services/store_user_info.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';

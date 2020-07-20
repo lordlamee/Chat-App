@@ -1,5 +1,6 @@
-import 'package:chat_app/sign_in.dart';
+
 import 'package:flutter/material.dart';
+import 'authentication/sign_in.dart';
 
 void main() {
   runApp(ChatApp());

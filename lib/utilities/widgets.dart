@@ -1,4 +1,4 @@
-import 'package:chat_app/chat_details.dart';
+import 'file:///C:/Users/OG/AndroidStudioProjects/chat_app/lib/screens/chat_details.dart';
 import 'package:chat_app/models/models.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';

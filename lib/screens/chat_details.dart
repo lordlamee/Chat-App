@@ -2,7 +2,7 @@ import 'package:chat_app/models/models.dart';
 import 'package:chat_app/services/chats_controller.dart';
 import 'package:chat_app/services/sign_in_service.dart';
 import 'package:chat_app/services/store_user_info.dart';
-import 'package:chat_app/widgets.dart';
+import 'file:///C:/Users/OG/AndroidStudioProjects/chat_app/lib/utilities/widgets.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';

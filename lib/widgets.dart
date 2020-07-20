@@ -1,4 +1,5 @@
 import 'package:chat_app/chat_details.dart';
+import 'package:chat_app/models/models.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -31,74 +32,67 @@ class ChatTile extends StatelessWidget {
                   )),
         );
       },
-      child: Padding(
-        padding: const EdgeInsets.only(bottom: 20),
-        child: Column(
-          children: <Widget>[
-            Row(
+      child: Row(
+        children: <Widget>[
+          Container(
+            height: 64,
+            width: 64,
+            decoration: BoxDecoration(
+              color: Colors.grey,
+              shape: BoxShape.circle,
+              image: DecorationImage(
+                image: image,
+              ),
+              //image: DecorationImage(image: image),
+            ),
+          ),
+          SizedBox(
+            width: 20,
+          ),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: <Widget>[
-                Container(
-                  height: 64,
-                  width: 64,
-                  decoration: BoxDecoration(
-                    color: Colors.grey,
-                    shape: BoxShape.circle,
-                    image: DecorationImage(
-                      image: image,
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    Text(
+                      name,
+                      style: GoogleFonts.rubik(
+                        color: textColor,
+                        fontWeight: FontWeight.w500,
+                      ),
                     ),
-                    //image: DecorationImage(image: image),
-                  ),
-                ),
-                SizedBox(
-                  width: 20,
-                ),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: <Widget>[
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          Text(
-                            name,
-                            style: GoogleFonts.rubik(
-                              color: textColor,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                          Text(
-                            messageTime,
-                            style: GoogleFonts.rubik(
-                              color: textColor.withOpacity(0.4),
-                            ),
-                          )
-                        ],
+                    Text(
+                      messageTime,
+                      style: GoogleFonts.rubik(
+                        color: textColor.withOpacity(0.4),
                       ),
-                      Text(
-                        messagePreview,
-                        style: GoogleFonts.rubik(
-                          color: textColor.withOpacity(0.4),
-                        ),
-                      ),
-                    ],
+                    )
+                  ],
+                ),
+                Text(
+                  messagePreview,
+                  style: GoogleFonts.rubik(
+                    color: textColor.withOpacity(0.4),
                   ),
                 ),
               ],
             ),
-            Divider()
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
 }
 
 class MessageBubble extends StatelessWidget {
-  MessageBubble({this.fromMe});
+  MessageBubble({this.fromMe,this.message,this.text});
 
   final bool fromMe;
-
+  final Message message;
+  final String text;
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -117,7 +111,7 @@ class MessageBubble extends StatelessWidget {
                   padding:
                       const EdgeInsets.symmetric(vertical: 10, horizontal: 5),
                   child: Text(
-                    'Hello there',
+                   text ,
                     style: GoogleFonts.manrope(
                       color: Colors.white,
                     ),
@@ -132,6 +126,7 @@ class MessageBubble extends StatelessWidget {
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
                       color: Colors.grey,
+                     // image: DecorationImage()
                     ),
                   ),
                   SizedBox(

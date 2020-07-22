@@ -1,4 +1,6 @@
 
+import 'package:chat_app/screens/chat_details.dart';
+import 'package:chat_app/services/sign_in_service.dart';
 import 'package:flutter/material.dart';
 import 'authentication/sign_in.dart';
 
@@ -9,7 +11,7 @@ class ChatApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: SignIn(),
+      home: appUser == null ? SignIn() : ChatScreen(),
     );
   }
 }

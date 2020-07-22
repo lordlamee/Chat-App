@@ -4,6 +4,7 @@ var userName;
 var userEmail;
 var photoUrl;
 var userId;
+FirebaseUser appUser;
 final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
 final GoogleSignIn googleSignIn = GoogleSignIn();
 Future<String> signInWithGoogle() async {
@@ -23,7 +24,8 @@ Future<String> signInWithGoogle() async {
   userEmail = currentUser.email;
   photoUrl = currentUser.photoUrl;
   userId = currentUser.uid;
-  return 'Sign In of $user success';
+  appUser = currentUser;
+  return "Sign in Successful";
 }
 
 signOutGoogle() async {

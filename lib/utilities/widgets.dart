@@ -22,14 +22,16 @@ class ChatTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return InkResponse(
-      onTap: () {
+    return InkWell(
+      enableFeedback: true,
+      onTap: () async{
+
         Navigator.push(
           context,
           CupertinoPageRoute(
               builder: (context) => ChatScreen(
                     name: name,
-                  )),
+                  ),),
         );
       },
       child: Row(

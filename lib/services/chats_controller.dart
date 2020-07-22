@@ -51,10 +51,6 @@ getChats() async {
   //  final messageCollection = t
 }
 
-searchUser(String name) {
-  fireStore.collection("users").where("name", ).getDocuments();
-}
-
 sendMessage(Message message, String documentId) async {
   await fireStore
       .collection("chats")

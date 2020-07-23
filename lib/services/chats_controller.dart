@@ -51,6 +51,18 @@ getChats() async {
   //  final messageCollection = t
 }
 
+Future<Map<String, String>> getRecipientDetails(String recipientId) async {
+  QuerySnapshot usersQuery = await fireStore.collection("users").getDocuments();
+  List<DocumentSnapshot> documents = usersQuery.documents;
+  List recipientDocumentList =
+      documents.where((element) => element.documentID == recipientId).toList();
+  DocumentSnapshot recipientDocument = recipientDocumentList[0];
+  return {
+    "name": recipientDocument["name"],
+    "photoUrl": recipientDocument["photoUrl"]
+  };
+}
+
 sendMessage(Message message, String documentId) async {
   await fireStore
       .collection("chats")

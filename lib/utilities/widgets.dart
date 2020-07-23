@@ -3,7 +3,10 @@ import 'package:chat_app/screens/chat_details.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-
+Map<String,String> testMap = {
+  "name" : "Olamide",
+  "photoUrl" : "google.com"
+};
 Size screenSize;
 const appBarColor = Color(0xFF2B3595);
 const textColor = Color(0xFF062743);

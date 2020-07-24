@@ -16,12 +16,13 @@ final appBarTextStyle = GoogleFonts.rubik(
 );
 
 class ChatTile extends StatelessWidget {
-  ChatTile({this.image, this.name, this.messageTime, this.messagePreview});
+  ChatTile({this.image, this.name, this.messageTime, this.messagePreview,this.recipientId});
 
   final ImageProvider image;
   final String name;
   final String messageTime;
   final String messagePreview;
+  final recipientId;
 
   @override
   Widget build(BuildContext context) {
@@ -34,6 +35,7 @@ class ChatTile extends StatelessWidget {
           CupertinoPageRoute(
               builder: (context) => ChatScreen(
                     name: name,
+                recipientId :recipientId,
                   ),),
         );
       },

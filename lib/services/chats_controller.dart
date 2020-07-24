@@ -63,12 +63,21 @@ Future<Map<String, String>> getRecipientDetails(String recipientId) async {
   };
 }
 
-sendMessage(Message message, String documentId) async {
-  await fireStore
+sendFirstMessage(recipientId, userId, message) async {
+  DocumentReference users =
+  await fireStore.collection("chats").add({
+    "users": [recipientId, userId]
+  });
+  // add message to the firebase collection
+  fireStore
       .collection("chats")
-      .document(documentId)
+      .document(users.documentID)
       .collection("messages")
-      .add(message.toJson());
+      .add({
+    "content": message,
+    "senderId": userId,
+    "timestamp": Timestamp.now()
+  });
 }
 
 getChatDetailId() {}

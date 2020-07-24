@@ -73,6 +73,7 @@ class Chats extends StatelessWidget {
                                   var recipientPhotUrl =
                                       snapshot.data.data["photoUrl"];
                                   return ChatTile(
+                                    recipientId : recipientId,
                                     messagePreview: "new message",
                                     name: recipientName,
                                     image: NetworkImage(

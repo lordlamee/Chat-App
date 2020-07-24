@@ -4,12 +4,14 @@ import 'package:chat_app/utilities/widgets.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:chat_app/services/chats_controller.dart';
 
 class ChatScreen extends StatelessWidget {
-  ChatScreen({this.name});
+  ChatScreen({this.name, this.recipientId});
 
   final String name;
   final TextEditingController textEditingController = TextEditingController();
+  final recipientId;
 
   @override
   Widget build(BuildContext context) {
@@ -125,30 +127,8 @@ class ChatScreen extends StatelessWidget {
                     ),
                     FlatButton(
                       onPressed: () async {
-                        // await sendMessage();
-                        //To get Recipient Id
-                        QuerySnapshot documentQuery = await fireStore
-                            .collection("users")
-                            .where("name", isEqualTo: name)
-                            .getDocuments();
-                        List<DocumentSnapshot> documents =
-                            documentQuery.documents;
-                        String recipientId = documents[0].documentID;
-                        // Add users to the firebase users field
-                        DocumentReference users =
-                            await fireStore.collection("chats").add({
-                          "users": [recipientId, userId]
-                        });
-                        // add message to the firebase collection
-                        fireStore
-                            .collection("chats")
-                            .document(users.documentID)
-                            .collection("messages")
-                            .add({
-                          "content": textEditingController.text,
-                          "senderId": userId,
-                          "timestamp": Timestamp.now()
-                        });
+                        await sendFirstMessage(
+                            recipientId, userId, textEditingController.text);
                         textEditingController.clear();
                       },
                       child: Text(

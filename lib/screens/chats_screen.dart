@@ -68,16 +68,17 @@ class Chats extends StatelessWidget {
                                   .snapshots(),
                               builder: (context, snapshot) {
                                 if (snapshot.hasData) {
+                                  Map recipientDocument = snapshot.data.data;
                                   var recipientName =
-                                      snapshot.data.data["name"];
-                                  var recipientPhotUrl =
-                                      snapshot.data.data["photoUrl"];
+                                      recipientDocument["name"];
+                                  var recipientPhotoUrl =
+                                      recipientDocument["photoUrl"];
                                   return ChatTile(
-                                    recipientId : recipientId,
+                                    recipientId: recipientId,
                                     messagePreview: "new message",
                                     name: recipientName,
                                     image: NetworkImage(
-                                        recipientPhotUrl.toString()),
+                                        recipientPhotoUrl.toString()),
                                     messageTime: "2:00pm",
                                   );
                                 } else {
@@ -95,9 +96,7 @@ class Chats extends StatelessWidget {
                 return Container();
               }
             } else {
-              return Container(
-                color: Colors.green,
-              );
+              return Container();
             }
           },
         ),

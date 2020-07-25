@@ -127,9 +127,22 @@ class ChatScreen extends StatelessWidget {
                     ),
                     FlatButton(
                       onPressed: () async {
-                        await sendFirstMessage(
-                            recipientId, userId, textEditingController.text);
+                        String message = textEditingController.text;
                         textEditingController.clear();
+                        if (recipientId != null) {
+                          await sendFirstMessage(
+                              recipientId, userId, message);
+                        } else {
+                          QuerySnapshot documentQuery = await fireStore
+                              .collection("users")
+                              .where("name", isEqualTo: name)
+                              .getDocuments();
+                          List<DocumentSnapshot> documents =
+                              documentQuery.documents;
+                          String generatedRecipientId = documents[0].documentID;
+                          await sendFirstMessage(generatedRecipientId, userId,
+                              message);
+                        }
                       },
                       child: Text(
                         'Send',
@@ -147,25 +160,3 @@ class ChatScreen extends StatelessWidget {
         ));
   }
 }
-//ListView(
-//children: <Widget>[
-//MessageBubble(
-//fromMe: true,
-//),
-//MessageBubble(
-//fromMe: false,
-//),
-//MessageBubble(
-//fromMe: true,
-//),
-//MessageBubble(
-//fromMe: false,
-//),
-//MessageBubble(
-//fromMe: true,
-//),
-//MessageBubble(
-//fromMe: false,
-//),
-//],
-//),

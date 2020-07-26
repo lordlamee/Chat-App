@@ -1,5 +1,5 @@
+import 'package:chat_app/authentication/sign_in.dart';
 import 'package:chat_app/screens/new_chat.dart';
-import 'package:chat_app/services/chats_controller.dart';
 import 'package:chat_app/services/sign_in_service.dart';
 import 'package:chat_app/services/store_user_info.dart';
 import 'package:chat_app/utilities/widgets.dart';
@@ -27,7 +27,9 @@ class Chats extends StatelessWidget {
         leading: InkResponse(
             onTap: () {
               signOutGoogle();
-              Navigator.pop(context);
+              Navigator.pushReplacement(context,MaterialPageRoute(
+                builder: (context) => SignIn()
+              ));
             },
             child: Icon(Feather.log_out)),
         title: Text(
@@ -74,6 +76,7 @@ class Chats extends StatelessWidget {
                                   var recipientPhotoUrl =
                                       recipientDocument["photoUrl"];
                                   return ChatTile(
+                                   chatId : chatDoc.documentID,
                                     recipientId: recipientId,
                                     messagePreview: "new message",
                                     name: recipientName,

@@ -3,10 +3,8 @@ import 'package:chat_app/screens/chat_details.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-Map<String,String> testMap = {
-  "name" : "Olamide",
-  "photoUrl" : "google.com"
-};
+
+Map<String, String> testMap = {"name": "Olamide", "photoUrl": "google.com"};
 Size screenSize;
 const appBarColor = Color(0xFF2B3595);
 const textColor = Color(0xFF062743);
@@ -16,27 +14,35 @@ final appBarTextStyle = GoogleFonts.rubik(
 );
 
 class ChatTile extends StatelessWidget {
-  ChatTile({this.image, this.name, this.messageTime, this.messagePreview,this.recipientId});
+  ChatTile(
+      {this.image,
+      this.name,
+      this.messageTime,
+      this.messagePreview,
+      this.recipientId,
+      this.chatId});
 
   final ImageProvider image;
   final String name;
   final String messageTime;
   final String messagePreview;
   final recipientId;
+  final chatId;
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
       enableFeedback: true,
-      onTap: () async{
-
+      onTap: () async {
         Navigator.push(
           context,
           CupertinoPageRoute(
-              builder: (context) => ChatScreen(
-                    name: name,
-                recipientId :recipientId,
-                  ),),
+            builder: (context) => ChatScreen(
+              chatId: chatId,
+              name: name,
+              recipientId: recipientId,
+            ),
+          ),
         );
       },
       child: Row(
@@ -95,11 +101,12 @@ class ChatTile extends StatelessWidget {
 }
 
 class MessageBubble extends StatelessWidget {
-  MessageBubble({this.fromMe,this.message,this.text});
+  MessageBubble({this.fromMe, this.message, this.text});
 
   final bool fromMe;
   final Message message;
   final String text;
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -118,7 +125,7 @@ class MessageBubble extends StatelessWidget {
                   padding:
                       const EdgeInsets.symmetric(vertical: 10, horizontal: 5),
                   child: Text(
-                   text ,
+                    text,
                     style: GoogleFonts.manrope(
                       color: Colors.white,
                     ),
@@ -133,7 +140,7 @@ class MessageBubble extends StatelessWidget {
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
                       color: Colors.grey,
-                     // image: DecorationImage()
+                      // image: DecorationImage()
                     ),
                   ),
                   SizedBox(

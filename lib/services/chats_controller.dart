@@ -32,5 +32,3 @@ sendFirstMessage(recipientId, userId, message) async {
   });
 }
 
-
-

@@ -6,13 +6,21 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:chat_app/services/chats_controller.dart';
 
-class ChatScreen extends StatelessWidget {
-  ChatScreen({this.name, this.recipientId});
+// ignore: must_be_immutable
+class ChatScreen extends StatefulWidget {
+  ChatScreen({this.name, this.recipientId,this.chatId});
 
   final String name;
-  final TextEditingController textEditingController = TextEditingController();
   final recipientId;
+  String chatId;
 
+  @override
+  _ChatScreenState createState() => _ChatScreenState();
+}
+
+class _ChatScreenState extends State<ChatScreen> {
+  final TextEditingController textEditingController = TextEditingController();
+  bool firstMessage = false;
   @override
   Widget build(BuildContext context) {
     screenSize = MediaQuery.of(context).size;
@@ -26,7 +34,7 @@ class ChatScreen extends StatelessWidget {
               },
               child: Icon(Icons.arrow_back_ios)),
           title: Text(
-            name,
+            widget.name,
             style: appBarTextStyle,
           ),
           centerTitle: true,
@@ -39,72 +47,29 @@ class ChatScreen extends StatelessWidget {
             children: <Widget>[
               Expanded(
                 child: StreamBuilder<QuerySnapshot>(
-                  stream: fireStore
-                      .collection("chats")
-                      .where("users", arrayContains: "user1id")
-                      .snapshots(),
-                  builder: (context, snapshot) {
-                    if (snapshot.hasData) {
-                      List chatSnapshotDocuments = snapshot.data.documents;
-                      if (chatSnapshotDocuments.isNotEmpty) {
-                        return ListView.builder(
-                          shrinkWrap: true,
-                          itemCount: chatSnapshotDocuments.length,
-                          itemBuilder: (context, index) {
-                            DocumentSnapshot messageDocument =
-                                chatSnapshotDocuments[index];
-                            return StreamBuilder<QuerySnapshot>(
-                              stream: fireStore
-                                  .collection("chats")
-                                  .document(messageDocument.documentID)
-                                  .collection("messages")
-                                  .orderBy("timestamp", descending: true)
-                                  .snapshots(),
-                              builder: (context, snapshot) {
-                                if (snapshot.hasData) {
-                                  List<DocumentSnapshot> message =
-                                      snapshot.data.documents;
-                                  List<Widget> messageBubbles = [];
-                                  for (var data in message) {
-                                    var text = data.data["content"];
-                                    Widget messageBubble = MessageBubble(
-                                      fromMe: true,
-                                      text: text,
-                                    );
-                                    messageBubbles.add(messageBubble);
-                                  }
-                                  return Container(
-                                    constraints: BoxConstraints.expand(
-                                      width: double.infinity,
-                                      height: screenSize.height -
-                                          screenSize.height * 0.24,
-                                    ),
-                                    child: ListView(
-                                      reverse: true,
-                                      children: messageBubbles,
-                                    ),
-                                  );
-                                } else {
-                                  return Container(
-                                    child: Text('stuff has no data'),
-                                  );
-                                }
-                              },
-                            );
-                          },
-                        );
-                      } else {
-                        return Container(
-                          child: Center(child: Text('working on it')),
-                        );
-                      }
-                    } else {
-                      return Container(
-                        child: Text('No Users Here'),
+                  stream: fireStore.collection("chats").document(widget.chatId).collection("messages").orderBy("timestamp",descending: true).snapshots(),
+                  builder: (context,snapshot){
+                    if(snapshot.hasData){
+                     List messageDocuments = snapshot.data.documents;
+                     List<MessageBubble> messages = [];
+                     for (var message in messageDocuments) {
+                       final messageText = message.data['content'];
+                       final messageSender = message.data['senderId'];
+                       final messageWidget = MessageBubble(
+                         fromMe: userId == messageSender,
+                         text: messageText,
+                       );
+                       messages.add(messageWidget);
+                     }
+                      return ListView(
+                        reverse: true,
+                        children: messages,
                       );
+                    }else{
+                      return Container();
                     }
                   },
-                ),
+                )
               ),
               Container(
                 height: screenSize.height * 0.08,
@@ -129,19 +94,29 @@ class ChatScreen extends StatelessWidget {
                       onPressed: () async {
                         String message = textEditingController.text;
                         textEditingController.clear();
-                        if (recipientId != null) {
-                          await sendFirstMessage(
-                              recipientId, userId, message);
-                        } else {
-                          QuerySnapshot documentQuery = await fireStore
-                              .collection("users")
-                              .where("name", isEqualTo: name)
-                              .getDocuments();
-                          List<DocumentSnapshot> documents =
-                              documentQuery.documents;
-                          String generatedRecipientId = documents[0].documentID;
-                          await sendFirstMessage(generatedRecipientId, userId,
-                              message);
+                        if(widget.chatId == null) {
+
+                          if (widget.recipientId != null) {
+                            await sendFirstMessage(
+                                widget.recipientId, userId, message);
+                          } else {
+                            QuerySnapshot documentQuery = await fireStore
+                                .collection("users")
+                                .where("name", isEqualTo: widget.name)
+                                .getDocuments();
+                            List<DocumentSnapshot> documents =
+                                documentQuery.documents;
+                            String generatedRecipientId = documents[0]
+                                .documentID;
+                            await sendFirstMessage(generatedRecipientId, userId,
+                                message);
+                          }
+                        }else{
+                          await fireStore.collection("chats").document(widget.chatId).collection("messages").add({
+                            "content": message,
+                            "senderId": userId,
+                            "timestamp": Timestamp.now()
+                          });
                         }
                       },
                       child: Text(

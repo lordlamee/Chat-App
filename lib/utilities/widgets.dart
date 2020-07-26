@@ -157,7 +157,7 @@ class MessageBubble extends StatelessWidget {
                       padding: const EdgeInsets.symmetric(
                           vertical: 10, horizontal: 5),
                       child: Text(
-                        'Hello there',
+                        text,
                         style: GoogleFonts.manrope(color: textColor),
                       ),
                     ),

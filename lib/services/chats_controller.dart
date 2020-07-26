@@ -21,7 +21,7 @@ sendFirstMessage(recipientId, userId, message) async {
     "users": [recipientId, userId]
   });
   // add message to the firebase collection
-  fireStore
+  DocumentReference messageRef = await fireStore
       .collection("chats")
       .document(users.documentID)
       .collection("messages")
@@ -30,5 +30,6 @@ sendFirstMessage(recipientId, userId, message) async {
     "senderId": userId,
     "timestamp": Timestamp.now()
   });
+  return messageRef.documentID;
 }
 

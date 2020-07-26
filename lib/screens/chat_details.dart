@@ -8,7 +8,7 @@ import 'package:chat_app/services/chats_controller.dart';
 
 // ignore: must_be_immutable
 class ChatScreen extends StatefulWidget {
-  ChatScreen({this.name, this.recipientId,this.chatId});
+  ChatScreen({this.name, this.recipientId, this.chatId});
 
   final String name;
   final recipientId;
@@ -21,6 +21,7 @@ class ChatScreen extends StatefulWidget {
 class _ChatScreenState extends State<ChatScreen> {
   final TextEditingController textEditingController = TextEditingController();
   bool firstMessage = false;
+
   @override
   Widget build(BuildContext context) {
     screenSize = MediaQuery.of(context).size;
@@ -46,31 +47,35 @@ class _ChatScreenState extends State<ChatScreen> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
               Expanded(
-                child: StreamBuilder<QuerySnapshot>(
-                  stream: fireStore.collection("chats").document(widget.chatId).collection("messages").orderBy("timestamp",descending: true).snapshots(),
-                  builder: (context,snapshot){
-                    if(snapshot.hasData){
-                     List messageDocuments = snapshot.data.documents;
-                     List<MessageBubble> messages = [];
-                     for (var message in messageDocuments) {
-                       final messageText = message.data['content'];
-                       final messageSender = message.data['senderId'];
-                       final messageWidget = MessageBubble(
-                         fromMe: userId == messageSender,
-                         text: messageText,
-                       );
-                       messages.add(messageWidget);
-                     }
-                      return ListView(
-                        reverse: true,
-                        children: messages,
+                  child: StreamBuilder<QuerySnapshot>(
+                stream: fireStore
+                    .collection("chats")
+                    .document(widget.chatId)
+                    .collection("messages")
+                    .orderBy("timestamp", descending: true)
+                    .snapshots(),
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    List messageDocuments = snapshot.data.documents;
+                    List<MessageBubble> messages = [];
+                    for (var message in messageDocuments) {
+                      final messageText = message.data['content'];
+                      final messageSender = message.data['senderId'];
+                      final messageWidget = MessageBubble(
+                        fromMe: userId == messageSender,
+                        text: messageText,
                       );
-                    }else{
-                      return Container();
+                      messages.add(messageWidget);
                     }
-                  },
-                )
-              ),
+                    return ListView(
+                      reverse: true,
+                      children: messages,
+                    );
+                  } else {
+                    return Container();
+                  }
+                },
+              )),
               Container(
                 height: screenSize.height * 0.08,
                 decoration: BoxDecoration(
@@ -94,29 +99,39 @@ class _ChatScreenState extends State<ChatScreen> {
                       onPressed: () async {
                         String message = textEditingController.text;
                         textEditingController.clear();
-                        if(widget.chatId == null) {
-
-                          if (widget.recipientId != null) {
-                            await sendFirstMessage(
-                                widget.recipientId, userId, message);
+                        if (message != null && message.trim() != "") {
+                          if (widget.chatId == "new chat") {
+                            if (widget.recipientId != null) {
+                              await sendFirstMessage(
+                                  widget.recipientId, userId, message);
+                            } else {
+                              //generate recipient Id just in case
+                              QuerySnapshot documentQuery = await fireStore
+                                  .collection("users")
+                                  .where("name", isEqualTo: widget.name)
+                                  .getDocuments();
+                              List<DocumentSnapshot> documents =
+                                  documentQuery.documents;
+                              String generatedRecipientId =
+                                  documents[0].documentID;
+                              //Generate chat Id for new chat
+                              var generatedChatId = await sendFirstMessage(
+                                  generatedRecipientId, userId, message);
+                              setState(() {
+                                widget.chatId = generatedChatId;
+                              });
+                            }
                           } else {
-                            QuerySnapshot documentQuery = await fireStore
-                                .collection("users")
-                                .where("name", isEqualTo: widget.name)
-                                .getDocuments();
-                            List<DocumentSnapshot> documents =
-                                documentQuery.documents;
-                            String generatedRecipientId = documents[0]
-                                .documentID;
-                            await sendFirstMessage(generatedRecipientId, userId,
-                                message);
+                            await fireStore
+                                .collection("chats")
+                                .document(widget.chatId)
+                                .collection("messages")
+                                .add({
+                              "content": message,
+                              "senderId": userId,
+                              "timestamp": Timestamp.now()
+                            });
                           }
-                        }else{
-                          await fireStore.collection("chats").document(widget.chatId).collection("messages").add({
-                            "content": message,
-                            "senderId": userId,
-                            "timestamp": Timestamp.now()
-                          });
                         }
                       },
                       child: Text(

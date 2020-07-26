@@ -58,10 +58,13 @@ class _NewChatState extends State<NewChat> {
                       var usersData = snapshot.data.documents;
                       List<ChatTile> chatTiles = [];
                       for (var data in usersData) {
+                        var recipientId = data.documentID;
                         var username = data.data["name"];
                         var photoUrl = data.data["photoUrl"];
                         if (username != userName) {
                           ChatTile chatTile = ChatTile(
+                            chatId: "new chat",
+                            recipientId: recipientId,
                             name: username.toString(),
                             messageTime: '2:00pm',
                             messagePreview: 'new message',

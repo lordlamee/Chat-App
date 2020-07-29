@@ -30,14 +30,14 @@ Future<FirebaseUser> signInWithGoogle() async {
   return currentUser;
 }
 
-checkForUser() async {
-  appUser = await _firebaseAuth.currentUser();
-  if (appUser != null) {
-    userName = appUser.displayName;
-    userEmail = appUser.email;
-    photoUrl = appUser.photoUrl;
-    userId = appUser.uid;
-    user = appUser;
+Future<FirebaseUser> checkForUser() async {
+  FirebaseUser checkUser = await _firebaseAuth.currentUser();
+  if (checkUser != null) {
+    userName = checkUser.displayName;
+    userEmail = checkUser.email;
+    photoUrl = checkUser.photoUrl;
+    userId = checkUser.uid;
+    return checkUser;
   } else {
     return null;
   }

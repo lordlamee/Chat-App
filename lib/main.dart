@@ -1,5 +1,5 @@
+import 'dart:async';
 
-import 'package:chat_app/screens/chat_details.dart';
 import 'package:chat_app/screens/chats_screen.dart';
 import 'package:chat_app/services/sign_in_service.dart';
 import 'package:flutter/material.dart';
@@ -14,15 +14,41 @@ class ChatApp extends StatefulWidget {
 }
 
 class _ChatAppState extends State<ChatApp> {
-  @override
-  void initState() {
-     checkForUser();
-    super.initState();
+
+  Future<Widget> returnFirstPage()async{
+     Widget firstPage = await checkForUser().then((value){
+       if (value == null){
+         return SignIn();
+       }else{
+         return Chats();
+       }
+     });
+     if (firstPage == null){
+       return Container(
+         color: Colors.green,
+       );
+     }else{
+       return firstPage;
+     }
   }
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: appUser == null ? SignIn() : Chats(),
+      home: FutureBuilder<Widget>(
+        future: returnFirstPage(),
+        builder: (context,snapshot){
+          if(snapshot.connectionState == ConnectionState.done){
+            return snapshot.data;
+          }else {
+            return Scaffold(
+              backgroundColor: Colors.white,
+                body : CircularProgressIndicator(
+                 // backgroundColor: appBarColor,
+                ));
+          }
+        },
+      )
     );
   }
 }
+

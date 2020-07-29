@@ -20,34 +20,32 @@ class ChatScreen extends StatefulWidget {
 
 class _ChatScreenState extends State<ChatScreen> {
   final TextEditingController textEditingController = TextEditingController();
-  bool firstMessage = false;
 
   @override
   Widget build(BuildContext context) {
     screenSize = MediaQuery.of(context).size;
-    //  getChats();
     return Scaffold(
-        appBar: AppBar(
-          backgroundColor: appBarColor,
-          leading: InkResponse(
-              onTap: () {
-                Navigator.pop(context);
-              },
-              child: Icon(Icons.arrow_back_ios)),
-          title: Text(
-            widget.name,
-            style: appBarTextStyle,
-          ),
-          centerTitle: true,
+      appBar: AppBar(
+        backgroundColor: appBarColor,
+        leading: InkResponse(
+            onTap: () {
+              Navigator.pop(context);
+            },
+            child: Icon(Icons.arrow_back_ios)),
+        title: Text(
+          widget.name,
+          style: appBarTextStyle,
         ),
-        body: Padding(
-          padding: const EdgeInsets.fromLTRB(20, 10, 20, 0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              Expanded(
-                  child: StreamBuilder<QuerySnapshot>(
+        centerTitle: true,
+      ),
+      body: Padding(
+        padding: const EdgeInsets.fromLTRB(20, 10, 20, 0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: <Widget>[
+            Expanded(
+              child: StreamBuilder<QuerySnapshot>(
                 stream: fireStore
                     .collection("chats")
                     .document(widget.chatId)
@@ -75,78 +73,48 @@ class _ChatScreenState extends State<ChatScreen> {
                     return Container();
                   }
                 },
-              )),
-              Container(
-                height: screenSize.height * 0.08,
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(6),
-                    color: Colors.black.withOpacity(0.05)),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: <Widget>[
-                    Expanded(
-                      child: TextField(
-                        controller: textEditingController,
-                        decoration: InputDecoration(
-                          hintText: 'Type a message',
-                          contentPadding: EdgeInsets.symmetric(
-                            horizontal: 10,
-                          ),
-                        ),
-                      ),
-                    ),
-                    FlatButton(
-                      onPressed: () async {
-                        String message = textEditingController.text;
-                        textEditingController.clear();
-                        if (message != null && message.trim() != "") {
-                          if (widget.chatId == "new chat") {
-                            if (widget.recipientId != null) {
-                              await sendFirstMessage(
-                                  widget.recipientId, userId, message);
-                            } else {
-                              //generate recipient Id just in case
-                              QuerySnapshot documentQuery = await fireStore
-                                  .collection("users")
-                                  .where("name", isEqualTo: widget.name)
-                                  .getDocuments();
-                              List<DocumentSnapshot> documents =
-                                  documentQuery.documents;
-                              String generatedRecipientId =
-                                  documents[0].documentID;
-                              //Generate chat Id for new chat
-                              var generatedChatId = await sendFirstMessage(
-                                  generatedRecipientId, userId, message);
-                              setState(() {
-                                widget.chatId = generatedChatId;
-                              });
-                            }
-                          } else {
-                            await fireStore
-                                .collection("chats")
-                                .document(widget.chatId)
-                                .collection("messages")
-                                .add({
-                              "content": message,
-                              "senderId": userId,
-                              "timestamp": Timestamp.now()
-                            });
-                          }
-                        }
-                      },
-                      child: Text(
-                        'Send',
-                        style: GoogleFonts.manrope(
-                          color: textColor,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
               ),
-            ],
-          ),
-        ));
+            ),
+            Container(
+              height: screenSize.height * 0.08,
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(6),
+                  color: Colors.black.withOpacity(0.05)),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: <Widget>[
+                  Expanded(
+                    child: TextField(
+                      controller: textEditingController,
+                      decoration: InputDecoration(
+                        hintText: 'Type a message',
+                        contentPadding: EdgeInsets.symmetric(
+                          horizontal: 10,
+                        ),
+                      ),
+                    ),
+                  ),
+                  FlatButton(
+                    onPressed: () async {
+                      String message = textEditingController.text;
+                      textEditingController.clear();
+                      await sendMessage(message, widget.chatId,
+                          widget.recipientId, userId, widget.name);
+                    },
+                    child: Text(
+                      'Send',
+                      style: GoogleFonts.manrope(
+                        color: textColor,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }

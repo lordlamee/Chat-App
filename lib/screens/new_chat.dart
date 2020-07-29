@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../utilities/widgets.dart';
+import 'package:chat_app/services/chats_controller.dart';
 
 class NewChat extends StatefulWidget {
   @override
@@ -74,13 +75,7 @@ class _NewChatState extends State<NewChat> {
                         }
                       }
                       // Filter List of Chat tiles
-                      if (searchParameter != null && searchParameter != "") {
-                        chatTiles = chatTiles
-                            .where((element) => element.name
-                                .toLowerCase()
-                                .contains(searchParameter.toLowerCase()))
-                            .toList();
-                      }
+                      newChatSearch(searchParameter, chatTiles);
                       return ListView.separated(
                         itemCount: chatTiles.length,
                         itemBuilder: (context, index) {

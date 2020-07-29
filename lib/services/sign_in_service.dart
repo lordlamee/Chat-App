@@ -44,5 +44,5 @@ Future<FirebaseUser> checkForUser() async {
 }
 
 signOutGoogle() async {
-  googleSignIn.signOut();
+  await googleSignIn.signOut();
 }

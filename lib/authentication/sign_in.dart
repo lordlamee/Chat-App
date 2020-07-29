@@ -22,7 +22,7 @@ class _SignInState extends State<SignIn> {
                 appUser = userSigningIn;
               });
               storeUserDetails();
-              Navigator.push(
+              Navigator.pushReplacement(
                   context, MaterialPageRoute(builder: (context) => Chats()));
             },
             icon: ImageIcon(

@@ -4,6 +4,7 @@ import 'package:chat_app/services/sign_in_service.dart';
 import 'package:chat_app/services/store_user_info.dart';
 import 'package:chat_app/utilities/widgets.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 
@@ -25,8 +26,10 @@ class Chats extends StatelessWidget {
         backgroundColor: appBarColor,
         centerTitle: true,
         leading: InkResponse(
-            onTap: () {
-              signOutGoogle();
+            onTap: () async{
+             await signOutGoogle();
+             await FirebaseAuth.instance.signOut();
+             print("signed out!");
               Navigator.pushReplacement(context,MaterialPageRoute(
                 builder: (context) => SignIn()
               ));

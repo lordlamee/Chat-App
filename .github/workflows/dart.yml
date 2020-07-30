@@ -29,10 +29,9 @@ jobs:
         with:
           flutter-version: '1.17.5'
           channel: 'stable'
-      - name: Install dependencies
-        run: pub get
-      - name: Run tests
-        run: pub run test
+      - run: flutter pub get
+      - run: flutter analyze --no-pub
+      - run: flutter format lib/
   build-android:
     name: Build Android app
     runs-on: ubuntu-latest

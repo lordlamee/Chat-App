@@ -1,10 +1,10 @@
+import 'package:chat_app/services/chats_controller.dart';
 import 'package:chat_app/services/sign_in_service.dart';
 import 'package:chat_app/services/store_user_info.dart';
 import 'package:chat_app/utilities/widgets.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:chat_app/services/chats_controller.dart';
 
 // ignore: must_be_immutable
 class ChatScreen extends StatefulWidget {
@@ -85,6 +85,12 @@ class _ChatScreenState extends State<ChatScreen> {
                 children: <Widget>[
                   Expanded(
                     child: TextField(
+                      onSubmitted: (message) async {
+                        textEditingController.clear();
+                        await sendMessage(message, widget.chatId,
+                            widget.recipientId, userId, widget.name);
+                      },
+                      textInputAction: TextInputAction.send,
                       controller: textEditingController,
                       decoration: InputDecoration(
                         hintText: 'Type a message',

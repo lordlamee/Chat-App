@@ -1,4 +1,3 @@
-import 'package:chat_app/models/models.dart';
 import 'package:chat_app/services/sign_in_service.dart';
 import 'package:chat_app/services/store_user_info.dart';
 import 'package:chat_app/utilities/widgets.dart';
@@ -32,34 +31,34 @@ sendFirstMessage(recipientId, userId, message) async {
   });
   return messageRef.documentID;
 }
- sendMessage(message,chatId,recipientId,senderId,recipientName)async{
-   if (message != null && message.trim() != "") {
-     if (chatId == "new chat") {
-       if (recipientId != null) {
-         await sendFirstMessage(
-             recipientId, senderId, message);
-       } else {
-         //generate recipient Id just in case
-         var generatedRecipientId = await generateRecipientId(recipientName);
-         await sendFirstMessage(
-             generatedRecipientId, userId, message);
+
+sendMessage(message, chatId, recipientId, senderId, recipientName) async {
+  if (message != null && message.trim() != "") {
+    if (chatId == "new chat") {
+      if (recipientId != null) {
+        await sendFirstMessage(recipientId, senderId, message);
+      } else {
+        //generate recipient Id just in case
+        var generatedRecipientId = await generateRecipientId(recipientName);
+        await sendFirstMessage(generatedRecipientId, userId, message);
 //                              setState(() {
 //                                widget.chatId = generatedChatId;
 //                              });
-       }
-     } else {
-       await fireStore
-           .collection("chats")
-           .document(chatId)
-           .collection("messages")
-           .add({
-         "content": message,
-         "senderId": senderId,
-         "timestamp": Timestamp.now()
-       });
-     }
-   }
- }
+      }
+    } else {
+      await fireStore
+          .collection("chats")
+          .document(chatId)
+          .collection("messages")
+          .add({
+        "content": message,
+        "senderId": senderId,
+        "timestamp": Timestamp.now()
+      });
+    }
+  }
+}
+
 newChatSearch(String searchFilter, List<ChatTile> chatTileList) {
   if (searchFilter != null && searchFilter != "") {
     chatTileList = chatTileList

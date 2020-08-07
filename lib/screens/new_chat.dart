@@ -1,10 +1,11 @@
+import 'package:chat_app/services/chats_controller.dart';
 import 'package:chat_app/services/sign_in_service.dart';
 import 'package:chat_app/services/store_user_info.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+
 import '../utilities/widgets.dart';
-import 'package:chat_app/services/chats_controller.dart';
 
 class NewChat extends StatefulWidget {
   @override
@@ -58,34 +59,47 @@ class _NewChatState extends State<NewChat> {
                     if (snapshot.hasData) {
                       var usersData = snapshot.data.documents;
                       List<ChatTile> chatTiles = [];
-                      for (var data in usersData) {
-                        var recipientId = data.documentID;
-                        var username = data.data["name"];
-                        var photoUrl = data.data["photoUrl"];
-                        if (username != userName) {
-                          ChatTile chatTile = ChatTile(
-                            chatId: "new chat",
-                            recipientId: recipientId,
-                            name: username.toString(),
-                            messageTime: '2:00pm',
-                            messagePreview: 'new message',
-                            image: NetworkImage(photoUrl.toString()),
-                          );
-                          chatTiles.add(chatTile);
-                        }
-                      }
-                      // Filter List of Chat tiles
-                      newChatSearch(searchParameter, chatTiles);
-                      return ListView.separated(
-                        itemCount: chatTiles.length,
-                        itemBuilder: (context, index) {
-                          return chatTiles[index];
-                        },
-                        separatorBuilder: (context, index) => Divider(
-                          height: 20,
-                        ),
-                        shrinkWrap: true,
-                      );
+                      return StreamBuilder<QuerySnapshot>(
+                          stream: fireStore.collection("chats").snapshots(),
+                          builder: (context, snapshot) {
+                            if (snapshot.hasData) {
+                              var chatDocs = snapshot.data.documents;
+                              for (var data in usersData) {
+                                for (var doc in chatDocs) {
+                                  var recipientId = data.documentID;
+                                  var username = data.data["name"];
+                                  var photoUrl = data.data["photoUrl"];
+                                  var chatId;
+                                  if (doc.data.containsValue(userId)) {
+                                    chatId = doc.documentID;
+                                  }
+                                  if (username != userName) {
+                                    ChatTile newChatTile = ChatTile(
+                                      chatId: chatId ?? "new chat",
+                                      messageTime: "2:00",
+                                      messagePreview: "message preview",
+                                      name: username,
+                                      recipientId: recipientId,
+                                      image: NetworkImage(photoUrl),
+                                    );
+                                    chatTiles.add(newChatTile);
+                                  }
+                                }
+                              }
+                            }
+                            // Filter List of Chat tiles
+                            newChatSearch(searchParameter, chatTiles);
+                            return ListView.separated(
+                              itemCount: chatTiles.length,
+                              itemBuilder: (context, index) {
+                                return chatTiles[index];
+                              },
+                              separatorBuilder: (context, index) => Divider(
+                                height: 20,
+                              ),
+                              shrinkWrap: true,
+                            );
+                          });
                     } else {
                       return Container(
                         child: Center(child: Text('No Users Here')),

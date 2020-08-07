@@ -29,7 +29,6 @@ class Chats extends StatelessWidget {
             onTap: () async{
              await signOutGoogle();
              await FirebaseAuth.instance.signOut();
-             print("signed out!");
               Navigator.pushReplacement(context,MaterialPageRoute(
                 builder: (context) => SignIn()
               ));

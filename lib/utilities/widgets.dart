@@ -109,62 +109,69 @@ class MessageBubble extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment:
-          fromMe ? CrossAxisAlignment.end : CrossAxisAlignment.start,
-      children: <Widget>[
-        fromMe
-            ? Material(
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(10),
-                  topRight: Radius.circular(10),
-                  bottomLeft: Radius.circular(10),
-                ),
-                color: appBarColor,
-                child: Padding(
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 10, horizontal: 5),
-                  child: Text(
-                    text,
-                    style: GoogleFonts.manrope(
-                      color: Colors.white,
-                    ),
+    return Container(
+      margin: EdgeInsets.symmetric(
+        vertical: 3,
+      ),
+      child: Column(
+        crossAxisAlignment:
+            fromMe ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+        children: <Widget>[
+          fromMe
+              ? Material(
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(10),
+                    topRight: Radius.circular(10),
+                    bottomLeft: Radius.circular(10),
                   ),
-                ),
-              )
-            : Row(
-                children: <Widget>[
-                  Container(
-                    height: 36,
-                    width: 36,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: Colors.grey,
-                      // image: DecorationImage()
-                    ),
-                  ),
-                  SizedBox(
-                    width: 8,
-                  ),
-                  Material(
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(10),
-                      topRight: Radius.circular(10),
-                      bottomRight: Radius.circular(10),
-                    ),
-                    color: textColor.withOpacity(0.1),
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 10, horizontal: 5),
-                      child: Text(
-                        text,
-                        style: GoogleFonts.manrope(color: textColor),
+                  color: appBarColor,
+                  child: Padding(
+                    padding:
+                        const EdgeInsets.symmetric(vertical: 10, horizontal: 5),
+                    child: Text(
+                      text,
+                      style: GoogleFonts.manrope(
+                        color: Colors.white,
                       ),
                     ),
                   ),
-                ],
-              )
-      ],
+                )
+              : Row(
+                  children: <Widget>[
+                    Container(
+                      height: 36,
+                      width: 36,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: Colors.grey,
+                        // image: DecorationImage()
+                      ),
+                    ),
+                    SizedBox(
+                      width: 8,
+                    ),
+                    Expanded(
+                      child: Material(
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(10),
+                          topRight: Radius.circular(10),
+                          bottomRight: Radius.circular(10),
+                        ),
+                        color: textColor.withOpacity(0.1),
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 10, horizontal: 5),
+                          child: Text(
+                            text,
+                            style: GoogleFonts.manrope(color: textColor),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                )
+        ],
+      ),
     );
   }
 }

@@ -38,6 +38,7 @@ class ChatTile extends StatelessWidget {
           context,
           CupertinoPageRoute(
             builder: (context) => ChatScreen(
+              photo: image,
               chatId: chatId,
               name: name,
               recipientId: recipientId,
@@ -101,11 +102,12 @@ class ChatTile extends StatelessWidget {
 }
 
 class MessageBubble extends StatelessWidget {
-  MessageBubble({this.fromMe, this.message, this.text});
+  MessageBubble({this.fromMe, this.message, this.text,this.image});
 
   final bool fromMe;
   final Message message;
   final String text;
+  final ImageProvider image;
 
   @override
   Widget build(BuildContext context) {
@@ -144,7 +146,9 @@ class MessageBubble extends StatelessWidget {
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
                         color: Colors.grey,
-                        // image: DecorationImage()
+                         image: DecorationImage(
+                           image:image,
+                         )
                       ),
                     ),
                     SizedBox(

@@ -2,7 +2,9 @@ import 'dart:async';
 
 import 'package:chat_app/screens/chats_screen.dart';
 import 'package:chat_app/services/sign_in_service.dart';
+import 'package:chat_app/view_model/chats_view_model.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'authentication/sign_in.dart';
 
 void main() {
@@ -33,21 +35,24 @@ class _ChatAppState extends State<ChatApp> {
   }
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: FutureBuilder<Widget>(
-        future: returnFirstPage(),
-        builder: (context,snapshot){
-          if(snapshot.connectionState == ConnectionState.done){
-            return snapshot.data;
-          }else {
-            return Scaffold(
-              backgroundColor: Colors.white,
-                body : CircularProgressIndicator(
-                 // backgroundColor: appBarColor,
-                ));
-          }
-        },
-      )
+    return ChangeNotifierProvider<ChatsData>(
+      create: (context) => ChatsData(),
+      child: MaterialApp(
+        home: FutureBuilder<Widget>(
+          future: returnFirstPage(),
+          builder: (context,snapshot){
+            if(snapshot.connectionState == ConnectionState.done){
+              return snapshot.data;
+            }else {
+              return Scaffold(
+                backgroundColor: Colors.white,
+                  body : CircularProgressIndicator(
+                   // backgroundColor: appBarColor,
+                  ));
+            }
+          },
+        )
+      ),
     );
   }
 }

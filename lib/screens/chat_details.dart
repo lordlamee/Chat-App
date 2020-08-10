@@ -8,11 +8,12 @@ import 'package:google_fonts/google_fonts.dart';
 
 // ignore: must_be_immutable
 class ChatScreen extends StatefulWidget {
-  ChatScreen({this.name, this.recipientId, this.chatId});
+  ChatScreen({this.name, this.recipientId, this.chatId,this.photo});
 
   final String name;
   final recipientId;
   String chatId;
+  final photo;
 
   @override
   _ChatScreenState createState() => _ChatScreenState();
@@ -60,6 +61,7 @@ class _ChatScreenState extends State<ChatScreen> {
                       final messageText = message.data['content'];
                       final messageSender = message.data['senderId'];
                       final messageWidget = MessageBubble(
+                        image: widget.photo,
                         fromMe: userId == messageSender,
                         text: messageText,
                       );

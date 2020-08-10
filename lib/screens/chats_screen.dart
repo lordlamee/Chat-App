@@ -3,10 +3,12 @@ import 'package:chat_app/screens/new_chat.dart';
 import 'package:chat_app/services/sign_in_service.dart';
 import 'package:chat_app/services/store_user_info.dart';
 import 'package:chat_app/utilities/widgets.dart';
+import 'package:chat_app/view_model/chats_view_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
+import 'package:provider/provider.dart';
 
 class Chats extends StatelessWidget {
   @override
@@ -26,12 +28,11 @@ class Chats extends StatelessWidget {
         backgroundColor: appBarColor,
         centerTitle: true,
         leading: InkResponse(
-            onTap: () async{
-             await signOutGoogle();
-             await FirebaseAuth.instance.signOut();
-              Navigator.pushReplacement(context,MaterialPageRoute(
-                builder: (context) => SignIn()
-              ));
+            onTap: () async {
+              await signOutGoogle();
+              await FirebaseAuth.instance.signOut();
+              Navigator.pushReplacement(
+                  context, MaterialPageRoute(builder: (context) => SignIn()));
             },
             child: Icon(Feather.log_out)),
         title: Text(
@@ -73,12 +74,11 @@ class Chats extends StatelessWidget {
                               builder: (context, snapshot) {
                                 if (snapshot.hasData) {
                                   Map recipientDocument = snapshot.data.data;
-                                  var recipientName =
-                                      recipientDocument["name"];
+                                  var recipientName = recipientDocument["name"];
                                   var recipientPhotoUrl =
                                       recipientDocument["photoUrl"];
-                                  return ChatTile(
-                                   chatId : chatDoc.documentID,
+                                  ChatTile newChatTile = ChatTile(
+                                    chatId: chatDoc.documentID,
                                     recipientId: recipientId,
                                     messagePreview: "new message",
                                     name: recipientName,
@@ -86,6 +86,7 @@ class Chats extends StatelessWidget {
                                         recipientPhotoUrl.toString()),
                                     messageTime: "2:00pm",
                                   );
+                                  return newChatTile;
                                 } else {
                                   return Container();
                                 }
